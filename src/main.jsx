@@ -1,24 +1,23 @@
-
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Link, NavLink, Route, Routes, useParams } from 'react-router-dom'
+import { HashRouter, Link, NavLink, Route, Routes, useParams, useLocation } from 'react-router-dom'
 import { ArrowUpRight, ArrowLeft, ArrowRight, Menu, X, Instagram, Github, Mail } from 'lucide-react'
 import { projects } from './projects'
 import './style.css'
-const imageFor = (file) => `/projects/${file}`
+const imageFor = (file) => `${import.meta.env.BASE_URL}projects/${file}`
 
 function Header() { const [open, setOpen] = useState(false)
 
   return (
   <header className="site-header">
-      <Link to="/" className="wordmark" onClick={() => setOpen(false)}>
+      <Link to="/" className="wordmark" onClick={() => { setOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>
         the catherine <em>edit.</em>
  </Link>
 
-      <button
-        className="mobile-toggle"
+     <button
+      className="mobile-toggle"
         aria-label={open ? 'Close menu' : 'Open menu'}
-        onClick={() => setOpen(!open)}
+              onClick={() => setOpen(!open)}
       >
         {open ? <X size={23}/> : <Menu size={23}/>}
       </button>
@@ -27,7 +26,7 @@ function Header() { const [open, setOpen] = useState(false)
         className={open ? 'navigation is-open' : 'navigation'}
         aria-label="Main navigation"
       >
-        <NavLink onClick={() => setOpen(false)} to="/">Home</NavLink>
+        <NavLink onClick={() => { setOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }} to="/">Home</NavLink>
         <Link onClick={() => setOpen(false)} to="/#about">About</Link>
         <Link onClick={() => setOpen(false)} to="/#work">The work</Link>
         <Link onClick={() => setOpen(false)} to="/#contact">Contact</Link>
@@ -128,9 +127,9 @@ function Home() {
         <div className="cover-footer">
           <span>WEB · FIGMA · GAME</span>
 
-          <a href="#work">
+          <Link to="/#work">
             TURN THE PAGE <ArrowRight size={15}/>
-          </a>
+          </Link>
         </div>
       </section>
 
@@ -250,7 +249,7 @@ function Home() {
         </p>
 
         <div className="contact-actions">
-          <a href="mailto:okoedec@gmail.com">
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=okoedec@gmail.com" target="_blank" rel="noopener noreferrer">
             Say hello <ArrowUpRight size={20}/>
           </a>
 
@@ -437,9 +436,25 @@ function ProjectDetail() {
   )
 }
 
+function ScrollToSection() {
+  const { pathname, hash } = useLocation()
+
+  useEffect(() => {
+    const target = hash ? document.getElementById(hash.slice(1)) : null
+
+    if (target) {
+      target.scrollIntoView({ behavior: 'instant', block: 'start' })
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    }
+  }, [pathname, hash])
+
+  return null
+}
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
+      <ScrollToSection/>
       <Header/>
 
       <Routes>
@@ -449,9 +464,9 @@ function App() {
 
       <footer className="site-footer">
         <span>THE CATHERINE EDIT © 2026</span>
-        <Link to="/">BACK TO TOP ↑</Link>
+        <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>BACK TO TOP ↑</Link>
       </footer>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
 
