@@ -1,7 +1,7 @@
 A personal portfolio with React, Vite, Tailwind CSS, and React Router
 
 +++++++++
-**Student:** Catherine Okoede  
+**Name:** Catherine Okoede  
 **Matriculation number: 23120111042
 ## Run locally
 
